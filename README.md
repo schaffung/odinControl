@@ -1,4 +1,4 @@
-# odinControl
+# odinControl [ Lagging behind the Redant Rexe ]
 A remote command executor
 
 ## Why do we need a remote command executor
