@@ -62,6 +62,6 @@ if __name__ == "__main__":
 
 Run the example code.
 
-``console
+```console
 [user@sample odinControl]$ python3 example.py
 ```
