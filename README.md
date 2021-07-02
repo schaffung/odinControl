@@ -1,4 +1,4 @@
-# odinControl [ Lagging behind the Redant Rexe ]
+# odinControl
 A remote command executor
 
 ## Why do we need a remote command executor
@@ -16,43 +16,52 @@ Is odinControl user friendly?
 You tell me. If it isn't, maybe the best way is to either open a BUG or request 
 some new feature.
 
-## Usage
-One can create an object of Rexe,
+## Wanna quickly try out odin?
 
-`
-rc_handle = Rexe(<path_of_conf_file>, <exec_file_path>) # <exec_file_path> is optional
-`
+Create a virtualenv
 
-Once the object has been created, connection has to be established to the remote servers
-before any operation is undertaken.
-
-`
-rc_handle.establish_connection()
-`
-
-To execute any command, one can either use the function `execute_command` or `execute_command_multinode`
-The difference being `execute_command` only executes a given command in one node while the latter does
-it in a given list of nodes.
-
-To obtain the list of nodes which were parsed from the config file, one could use the instance variable
-`conf_data['host_list']`
-
-For example if somebody had to execute a command `ls /home` on the first node in the given list of hosts,
-
-`ret = rc_handle.execute_command(rc_handle.conf_data['host_list'][1], 'ls /home')`
-
-Now the return value will be of the following format,
-
-```javascript
-{
-  'Flag' : True/False,
-  'node' : "the node for which the command was run",
-  'cmd' : "the command which was requested",
-  'error_code' : BASH error code in integer
-  'msg' : "The return value in form of dictionary for glusterfs commands or string for other commands"
-}
+```console
+[user@sample odinControl]$ virtualenv v1
+----some output
 ```
 
-In case of multinode command execution, the result will be a list of result dictionaries of all the nodes
-so if we have `ret`', `ret2`, `ret3` then the return value of `execute_command_multinode` will be
-[ret1, ret2, ret3]
+Activate the virtual env
+
+```console
+[user@sample odinControl]$ source v1/bin/activate
+```
+
+Install the requirements for odin
+
+```console
+[user@sample odinControl]$ pip3 instal -r requirements.txt
+```
+
+Set up passwordless ssh with a remote server. Currently the support is only
+for root user but this is to be changed to be a configurable model.
+
+```console
+[user@sample odinControl]$ ssh-copy-id root@xx.yy.zz.ll
+```
+
+Edit the example to reflect the server you've just set-up for the passwordless
+ssh. As shown below
+
+
+```python
+from odin import Odin
+
+if __name__ == "__main__":
+    server_list = ["xx.yy.zz.ll"] # The ip address change <-----
+    odc = Odin(server_list)
+    odc.establish_connection()
+    print(odc.execute_command("echo sample_value", server_list[0]))
+    print(odc.execute_command("date", server_list[0]))
+    odc.deconstruct_connection()
+```
+
+Run the example code.
+
+``console
+[user@sample odinControl]$ python3 example.py
+```

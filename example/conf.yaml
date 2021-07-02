@@ -1,3 +1,0 @@
-host_list: [IP address1, IP address 2,..]
-user: "username(ex:root)"
-passwd: "password"
